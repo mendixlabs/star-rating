@@ -1,4 +1,5 @@
 import { Component, createElement } from "react";
+import { Alert } from "./Alert";
 import { StarRating } from "./StarRating";
 
 interface WrapperProps {
@@ -6,17 +7,18 @@ interface WrapperProps {
     mxObject: mendix.lib.MxObject;
     readOnly: boolean;
     style: string;
-
 }
 
 export interface ContainerProps extends WrapperProps {
-    editable: "default" | "never";
-    mxObject: mendix.lib.MxObject;
-    viewAverage: boolean;
     // Properties from Mendix modeler
-    rateAttribute: string;
+    editable: "default" | "never";
+    maximumStars: number;
     onChangeMicroflow: string;
+    rateAttribute: string;
+    widgetColor: widgetColors;
 }
+// tslint:disable max-length-line
+export type widgetColors = "widget" | "default" | "primary" | "success" | "info" | "warning" | "danger" | "inverse" ;
 
 interface ContainerState {
     initialRate: number;
@@ -39,17 +41,24 @@ export default class StarRatingContainer extends Component<ContainerProps, Conta
     }
 
     render() {
-        const { mxObject } = this.props;
-        const readOnly = this.props.editable === "never"
-            || (mxObject && mxObject.isReadonlyAttr(this.props.rateAttribute)) || this.props.readOnly || !mxObject;
+        const alertMessage = StarRatingContainer.validateProps(this.props);
+        if (!alertMessage) {
+            const { mxObject } = this.props;
+            const readOnly = this.props.editable === "never"
+                || (mxObject && mxObject.isReadonlyAttr(this.props.rateAttribute)) || this.props.readOnly || !mxObject;
 
-        return createElement(StarRating, {
-            className: this.props.class,
-            handleOnChange: this.handleOnChange,
-            initialRate: this.state.initialRate,
-            readOnly,
-            style: StarRatingContainer.parseStyle(this.props.style)
-        });
+            return createElement(StarRating, {
+                className: this.props.class,
+                handleOnChange: this.handleOnChange,
+                initialRate: this.state.initialRate,
+                readOnly,
+                maximumStars: this.props.maximumStars,
+                style: StarRatingContainer.parseStyle(this.props.style),
+                widgetColor: this.props.widgetColor
+            });
+        } else {
+            return createElement(Alert, { message: alertMessage });
+        }
     }
 
     componentWillReceiveProps(nextProps: ContainerProps) {
@@ -108,7 +117,18 @@ export default class StarRatingContainer extends Component<ContainerProps, Conta
         });
     }
 
-    private static parseStyle(style = ""): { [key: string]: string } {
+    public static validateProps(props: ContainerProps) {
+        const errorMessage: string[] = [];
+        if (props.maximumStars < 1) {
+            errorMessage.push("- Number of stars should be greater than Zero (0)");
+        }
+        if (errorMessage.length) {
+            errorMessage.unshift("Configuration Error: ");
+        }
+        return errorMessage.join("\n");
+    }
+
+    public static parseStyle(style = ""): { [key: string]: string } {
         try {
             return style.split(";").reduce<{ [key: string]: string }>((styleObject, line) => {
                 const pair = line.split(":");
@@ -119,7 +139,8 @@ export default class StarRatingContainer extends Component<ContainerProps, Conta
                 return styleObject;
             }, {});
         } catch (error) {
-            window.logger.error("Failed to parse style", style, error);
+            // tslint:disable-next-line no-console
+            console.error("Failed to parse style", style, error);
         }
 
         return {};

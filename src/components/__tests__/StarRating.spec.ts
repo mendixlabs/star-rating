@@ -4,6 +4,7 @@ import { createElement, DOM } from "react";
 import * as Rating from "react-rating";
 
 import { StarRating, StarRatingProps } from "../StarRating";
+import { widgetColors } from "../StarRatingContainer";
 
 describe("StarRating", () => {
     let starProps: StarRatingProps;
@@ -13,7 +14,9 @@ describe("StarRating", () => {
         starProps = {
             handleOnChange: jasmine.createSpy("onChange"),
             initialRate: 2,
-            readOnly: false
+            maximumStars: 5,
+            readOnly: false,
+            widgetColor: "widget"
         };
     });
 
@@ -23,9 +26,9 @@ describe("StarRating", () => {
         expect(starRating).toBeElement(
             DOM.div({ className: "widget-star-rating" },
                 createElement(Rating, {
-                    empty: "glyphicon glyphicon-star-empty widget-star-rating-empty widget-star-rating-font",
+                    empty: "glyphicon glyphicon-star-empty widget-star-rating-empty",
                     fractions: 1,
-                    full: "glyphicon glyphicon-star widget-star-rating-full widget-star-rating-font",
+                    full: "glyphicon glyphicon-star widget-star-rating-full",
                     initialRate: 2,
                     onChange: jasmine.any(Function) as any,
                     readonly: starProps.readOnly,
@@ -58,12 +61,12 @@ describe("StarRating", () => {
         expect(starRating.props().initialRate).toEqual(0);
     });
 
-    it("should render max 5 stars for large positive rating", () => {
+    it("should render max stars for large positive rating", () => {
         starProps.initialRate = 100;
 
         const starRating = renderStarRating(starProps).find(Rating);
 
-        expect(starRating.props().initialRate).toEqual(5);
+        expect(starRating.props().initialRate).toEqual(starProps.maximumStars);
     });
 
 });

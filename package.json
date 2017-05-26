@@ -1,7 +1,7 @@
 {
   "name": "star-rating",
   "widgetName": "StarRating",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This widget lets users rate an object with stars from 1 to 5.",
   "copyright": "Mendix BV",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@types/classnames": "0.0.32",
-    "@types/core-js": "^0.9.36",
+    "@types/core-js": "0.9.36",
     "@types/enzyme": "^2.7.9",
     "@types/jasmine": "^2.5.47",
     "@types/karma": "^0.13.35",
@@ -46,6 +46,7 @@
     "grunt-contrib-compress": "^1.4.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",
+    "grunt-file-append": "0.0.7",
     "grunt-newer": "^1.1.1",
     "grunt-webpack": "^2.0.1",
     "istanbul": "^0.4.3",
@@ -61,11 +62,14 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.2",
     "mendix-client": "https://github.com/FlockOfBirds/Mendix-client-typing/archive/7.1.0.tar.gz",
+    "node-sass": "^4.5.3",
+    "raw-loader": "^0.5.1",
     "react": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
     "remap-istanbul": "^0.9.0",
     "source-map-loader": "^0.2.0",
+    "sass-loader":"^6.0.5",
     "style-loader": "^0.17.0",
     "ts-loader": "^2.0.1",
     "tslint": "^5.2.0",
@@ -76,6 +80,6 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "react-rating": "^0.7.1"
+    "react-rating": "https://github.com/djkwagala/react-rating/archive/v0.7.2-beta.tar.gz"
   }
 }

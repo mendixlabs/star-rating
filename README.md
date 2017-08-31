@@ -26,15 +26,17 @@ Editing of a rate is possible if the logged in user owns that vote
 This widget requires a context.
 
 ## Customize rating icon
-In order to over-write the default star icon, add these classes to your project theme. Replace content with your preferred glyphicon icon
+In order to over-write the default star icon, add these classes to your project theme. Replace `content` with your preferred glyphicon icon
 ``` css
- [class*="widget-star-rating-full"]:before {
+ .rating-flag [class*="widget-star-rating-full"]:before {
   content: "\e034"; /* flag icon */ 
  }
-.widget-star-rating-empty:before {
+.rating-flag .widget-star-rating-empty:before {
   content: "\e034"; /* flag icon */
  }
 ```
+Note. Add class `rating-flag` to the widget configuration in the modeler tab 'common'
+
 ### Security Configuration
 
 Security is a mandatory feature for rating and is considered seriously for proper use of this widget in a mendix project.
